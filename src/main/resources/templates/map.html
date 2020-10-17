@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" sc>
+<head>
+    <meta charset="UTF-8">
+    <title>Infected stats</title>
+
+    <style>
+        #mapid {
+            height: 100vh;
+        }</style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+
+</head>
+<body>
+<div id="mapid"></div>
+
+<script th:inline="javascript">
+
+    var points = [[${points}]]
+
+    var map = L.map('mapid', {scrollWheelZoom: false}).setView([52.22, 21.01], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    points.forEach(point => {
+        L.marker([point.lat, point.lon]).addTo(map)
+            .bindPopup(point.value)
+            .openPopup();
+
+    })
+
+
+</script>
+
+</body>
+
+</html>
