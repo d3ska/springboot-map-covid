@@ -55,16 +55,20 @@ public class CovidParser implements DataParser<Point> {
     }
 
     private static String getCurrentDate() {
-        int databaseUpdateDelay = 1;
-        DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-        if(LocalTime.now().isBefore(LocalTime.of(9,0)))
-            databaseUpdateDelay = 2;
-        String date = formatDate(databaseUpdateDelay, formater);
+        int databaseUpdateDelay = 2;
+        if(dataIsUpdated())
+            databaseUpdateDelay = 1;
+        String date = formatDate(databaseUpdateDelay);
         return date;
     }
 
-    private static String formatDate(int databaseUpdateDelay, DateTimeFormatter formatter) {
-        String date = LocalDate.now().minusDays(databaseUpdateDelay).format(formatter);
+    private static boolean dataIsUpdated() {
+        return LocalTime.now().isAfter(LocalTime.of(9, 0));
+    }
+
+    private static String formatDate(int databaseUpdateDelay) {
+        DateTimeFormatter formater = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        String date = LocalDate.now().minusDays(databaseUpdateDelay).format(formater);
         date = date.substring(0, 8);
         date = date.replace("-", "/");
         return date;
